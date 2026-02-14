@@ -80,8 +80,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result.rows[0], { status: 201 })
   } catch (error) {
     console.error('Error creating interview:', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json(
-      { error: 'Failed to create interview' },
+      {
+        error: 'Failed to create interview',
+        details: errorMessage,
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     )
   }

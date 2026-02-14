@@ -28,19 +28,34 @@ export default function Page() {
       if (keyword) {
         url.searchParams.set('keyword', keyword)
       }
+      console.log('Fetching interviews from:', url.toString())
       const response = await fetch(url.toString())
+      console.log('Response status:', response.status, response.statusText)
+
       const data = await response.json()
-      
+      console.log('Response data:', data)
+
       if (!response.ok) {
-        setError(data.error || 'Failed to fetch interviews')
+        const errorMsg = data.error || 'Failed to fetch interviews'
+        console.error('API error:', errorMsg, data)
+        setError(errorMsg)
         setInterviews([])
         return
       }
-      
+
+      if (!Array.isArray(data)) {
+        console.error('Invalid data format:', data)
+        setError('Invalid response format from server')
+        setInterviews([])
+        return
+      }
+
+      console.log('Successfully fetched', data.length, 'interviews')
       setInterviews(data)
     } catch (err) {
       console.error('Error fetching interviews:', err)
-      setError('Error connecting to database')
+      const errorMsg = err instanceof Error ? err.message : 'Error connecting to database'
+      setError(errorMsg)
       setInterviews([])
     } finally {
       setIsLoading(false)
