@@ -2,6 +2,8 @@
 
 長崎県茂木の魅力的なコンテンツを取材・記録するアプリケーション
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/kou-uni/ryu-san-app)
+
 ## 技術スタック
 
 - **フロントエンド**: Next.js 16.1.6 (App Router)
