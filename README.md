@@ -5,11 +5,53 @@
 ## 技術スタック
 
 - **フロントエンド**: Next.js 16.1.6 (App Router)
-- **データベース**: PostgreSQL (Docker)
+- **データベース**: PostgreSQL (Neon / Docker)
 - **UI**: Radix UI + Tailwind CSS
 - **言語**: TypeScript
 
 ## セットアップ手順
+
+### オプションA: Neon Database（本番環境推奨）
+
+Vercelにデプロイする場合や本番環境ではNeonを使用することを推奨します。
+
+#### 1. Neonプロジェクトの作成
+
+1. [Neon](https://neon.tech) にアクセスしてアカウントを作成
+2. 新しいプロジェクトを作成
+3. 接続文字列（Connection String）をコピー
+
+#### 2. データベースの初期化
+
+Neonのコンソールで以下のSQLを実行:
+
+```bash
+# scripts/setup-neon.sql の内容をNeon SQLエディタで実行
+```
+
+または、`psql`コマンドで実行:
+
+```bash
+psql "your-neon-connection-string" -f scripts/setup-neon.sql
+```
+
+#### 3. 環境変数の設定
+
+`.env.local` ファイルを作成:
+
+```env
+DATABASE_URL=your-neon-connection-string
+```
+
+Vercelにデプロイする場合は、Vercelのプロジェクト設定で環境変数を設定してください。
+
+---
+
+### オプションB: ローカルDocker（開発環境）
+
+ローカル開発では、Docker Composeを使用してPostgreSQLを起動できます。
+
+## セットアップ手順（Docker）
 
 ### 1. 依存関係のインストール
 
@@ -93,3 +135,25 @@ ports:
 ```
 DATABASE_URL=postgresql://ryu_user:ryu_password@localhost:5433/ryu_san_db
 ```
+
+## Vercelへのデプロイ
+
+### 1. Neonデータベースのセットアップ
+
+1. [Neon](https://neon.tech) で新しいプロジェクトを作成
+2. 接続文字列をコピー（例: `postgresql://username:password@ep-xxxxx.us-east-2.aws.neon.tech/neondb?sslmode=require`）
+3. Neon SQLエディタで `scripts/setup-neon.sql` の内容を実行してテーブルを作成
+
+### 2. Vercelプロジェクトの設定
+
+1. GitHubリポジトリをVercelにインポート
+2. Vercelプロジェクトの Settings → Environment Variables で以下を設定:
+   - `DATABASE_URL`: Neonの接続文字列を設定
+
+### 3. デプロイ
+
+```bash
+git push origin main
+```
+
+Vercelが自動的にビルド・デプロイします。

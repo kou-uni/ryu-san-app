@@ -124,7 +124,7 @@ export default function Page() {
               <p className="text-sm mt-1">{error}</p>
               {error.includes('Database not configured') && (
                 <p className="text-sm mt-2 text-red-600">
-                  Supabase環境変数が設定されていません。プロジェクト設定で設定してください。
+                  DATABASE_URL環境変数が設定されていません。Vercelのプロジェクト設定で設定してください。
                 </p>
               )}
             </div>
